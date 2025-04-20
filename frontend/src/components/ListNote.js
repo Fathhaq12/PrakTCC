@@ -82,7 +82,7 @@ const ListNote = () => {
 
   return (
     <div className="container">
-      <h2 className="title">Daftar Catatan</h2>
+      <h2 className="title">Daftar Catatannn</h2>
       <div className="header">
         <h5 className="total-notes">Total Catatan: {notes.length}</h5>
         <button className="btn-add" onClick={() => openModal()}>
