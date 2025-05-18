@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ✅ Konfigurasi CORS
-const allowedOrigins = ["https://notes-frontend-haqqi-dot-f-01-450707.uc.r.appspot.com","http://localhost:3000"];
+const allowedOrigins = ["https://notes-frontend-haqqi-dot-f-01-450707.uc.r.appspot.com",];
 
 app.use(
   cors({
