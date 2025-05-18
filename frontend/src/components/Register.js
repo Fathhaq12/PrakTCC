@@ -42,12 +42,12 @@ const Register = () => {
       setTimeout(() => {
         navigate("/login");
       }, 1000);
-      
     } catch (error) {
+      console.error("Register error:", error.response || error);
       setError(
         error.response?.data?.msg ||
-        error.response?.data?.message ||
-        "Registration failed. Please try again."
+          error.response?.data?.message ||
+          "Registration failed. Please try again."
       );
     } finally {
       setIsLoading(false);
@@ -90,7 +90,7 @@ const Register = () => {
           required
           autoComplete="new-password"
         />
-        
+
         <input
           type="password"
           name="confirmPassword"
@@ -110,10 +110,7 @@ const Register = () => {
         </button>
 
         <div className="auth-link register-link">
-          Already have an account?{" "}
-          <Link to="/login">
-            Login here
-          </Link>
+          Already have an account? <Link to="/login">Login here</Link>
         </div>
       </form>
     </div>
