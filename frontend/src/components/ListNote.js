@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../ListNote.css"; // Import the new layout CSS file
-import {BASE_URL} from "../utils"
+import { BASE_URL } from "../utils";
 
 const ListNote = () => {
   const [notes, setNotes] = useState([]);
@@ -19,8 +19,16 @@ const ListNote = () => {
 
   const getNotes = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/notes`);
-      console.log("Fetched notes:", response.data); // Debug log
+      const token = localStorage.getItem("accessToken"); // ambil token dari localStorage
+      if (!token) {
+        console.warn("No access token found, please login.");
+        return;
+      }
+      const response = await axios.get(`${BASE_URL}/notes`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setNotes(response.data);
     } catch (error) {
       console.error("Gagal mengambil catatan:", error);
@@ -29,10 +37,18 @@ const ListNote = () => {
 
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/notes/${id}`);
-      getNotes();
+      const token = localStorage.getItem("accessToken");
+      await axios.delete(`${BASE_URL}/delete-notes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setNotes(notes.filter((note) => note.id !== id));
+      if (selectedNote && selectedNote.id === id) {
+        setSelectedNote(null);
+      }
     } catch (error) {
-      console.error("Gagal menghapus catatan:", error);
+      console.error("Error deleting note:", error);
     }
   };
 
@@ -53,10 +69,17 @@ const ListNote = () => {
   const saveNote = async (e) => {
     e.preventDefault();
     try {
+       const token = localStorage.getItem("accessToken");
       await axios.post(`${BASE_URL}/notes`, {
         Judul: judul,
         Deskripsi: deskripsi,
-      });
+      },
+       {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+    );
       closeModal();
       getNotes();
       navigate("/");
@@ -68,10 +91,17 @@ const ListNote = () => {
   const updateNote = async (e) => {
     e.preventDefault();
     try {
+       const token = localStorage.getItem("accessToken");
       await axios.patch(`${BASE_URL}/notes/${selectedNote.id}`, {
         Judul: judul,
         Deskripsi: deskripsi,
-      });
+      },
+       {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+    );
       closeModal();
       getNotes();
       navigate("/");
@@ -80,9 +110,24 @@ const ListNote = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${BASE_URL}/logout`);
+      navigate("/login");
+    } catch (error) {
+      console.error("Gagal logout:", error);
+      navigate("/login"); // Tetap arahkan ke login jika gagal
+    }
+  };
+
   return (
     <div className="container">
-      <h2 className="title">Daftar Catatan</h2>
+      <div className="header">
+        <h2 className="title">Daftar Catatan</h2>
+        <button className="btn-logout" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
       <div className="header">
         <h5 className="total-notes">Total Catatan: {notes.length}</h5>
         <button className="btn-add" onClick={() => openModal()}>
