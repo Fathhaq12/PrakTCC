@@ -122,12 +122,16 @@ const ListNote = () => {
 
   return (
     <div className="container">
+<<<<<<< HEAD
       <div className="header">
         <h2 className="title">Daftar Catatan</h2>
         <button className="btn-logout" onClick={handleLogout}>
           Logout
         </button>
       </div>
+=======
+      <h2 className="title">Daftar Catatannn</h2>
+>>>>>>> 150b67ebd27e5811b514bc443e31e8dc8d009489
       <div className="header">
         <h5 className="total-notes">Total Catatan: {notes.length}</h5>
         <button className="btn-add" onClick={() => openModal()}>
