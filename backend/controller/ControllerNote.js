@@ -55,4 +55,3 @@ export const DeleteNote = async (req, res) => {
     console.log(error.message);
             }
 }
-export { getNotes, CreateNote, UpdateNote, DeleteNote, getNoteById };
