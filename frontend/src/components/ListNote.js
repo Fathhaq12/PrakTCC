@@ -38,7 +38,7 @@ const ListNote = () => {
   const deleteNote = async (id) => {
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.delete(`${BASE_URL}/delete-notes/${id}`, {
+      await axios.delete(`${BASE_URL}/notes/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
